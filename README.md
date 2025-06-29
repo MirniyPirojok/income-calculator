@@ -4,7 +4,7 @@ Income Calculator is a simple web application designed to convert income from va
 
 This tool was inspired by the need to easily calculate numbers for tax declarations with the correct currency conversions.
 
-Check out the live web app here: https://mirniypirojok.github.io/currency-converter/
+Check out the live web app here: https://mirniypirojok.github.io/income-calculator/
 
 ## License
 
