@@ -10,10 +10,18 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f7f9fc;
     color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     padding: 20px;
 }
 
@@ -80,7 +88,7 @@ select:focus {
     margin-bottom: 10px;
     padding: 12px;
     background-color: transparent;
-    border: 2px solid #007bff; /* Голубой обод */
+    border: 2px solid #007bff;
     color: #007bff;
     border-radius: 8px;
     font-size: 16px;
@@ -89,12 +97,12 @@ select:focus {
 }
 
 #add-income:hover {
-    background-color: rgba(0, 123, 255, 0.1); /* Легкий голубой оттенок при наведении */
-    color: #0056b3; /* Темнее при наведении */
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #0056b3;
 }
 
 #add-income:active {
-    transform: scale(0.98); /* Небольшая анимация при нажатии */
+    transform: scale(0.98);
 }
 
 /* Button for removing an entry */
@@ -166,8 +174,34 @@ button:active {
     color: red;
     font-size: 0.8em;
     margin-left: 1px;
-    display: none; /* Initially hidden */
+    opacity: 0;
+    transition: opacity 0.3s;
 }
+
+.copy-msg.show {
+    opacity: 1;
+}
+
+.footer {
+    margin-top: 40px;
+    text-align: center;
+    padding: 20px;
+    color: #777;
+    font-size: 14px;
+    background: transparent;
+}
+
+.footer-text a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.footer-text a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
 
 /* Responsive design */
 @media (max-width: 600px) {
