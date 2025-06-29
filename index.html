@@ -1,81 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Income Calculator: convert income to GEL using official exchange rates and calculate total income.">
-    <title>Income Calculator in GEL</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Income Calculator: convert income to GEL using official exchange rates and calculate total income."/>
+  <title>Income Calculator in GEL</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class="lang-switcher" style="position: absolute; top: 20px; right: 20px;">
-        <button onclick="setLanguage('en')">EN</button>
-        <button onclick="setLanguage('ru')">RU</button>
-    </div>
+  <div class="lang-switcher" style="position: absolute; top: 20px; right: 20px;">
+    <button onclick="setLanguage('en')">EN</button>
+    <button onclick="setLanguage('ru')">RU</button>
+  </div>
 
-    <main class="main">
-        <div class="container">
-            <p class="app-description" data-i18n="description">
-                Income Calculator is a web app that converts income to GEL (Georgian Lari) based on a specific date and calculates total yearly income in GEL using rates from the National Bank of Georgia's API.
-                View the source code on <a href="https://github.com/MirniyPirojok/currency-converter">GitHub</a>
-            </p>
+  <main class="main">
+    <div class="container">
+      <p class="app-description" data-i18n="description"></p>
 
-            <form id="converter-form">
-                <div id="income-entries">
-                    <div class="income-entry">
-                        <input type="number" step="0.01" class="income-amount" placeholder="Enter Income" data-i18n-placeholder="enterIncome" required>
-                        <select class="income-currency" required>
-                            <option value="USD" selected>USD</option>
-                            <option value="EUR">EUR</option>
-                            <option value="RUB">RUB</option>
-                        </select>
-                        <input type="date" class="income-date" required>
-                    </div>
-                </div>
-
-                <button type="button" id="add-income" data-i18n="addIncome">+Add Income</button>
-                <input
-                    type="number"
-                    step="0.01"
-                    id="yearly-income"
-                    title="This is the text of the tooltip"
-                    placeholder="Enter Yearly Income in GEL"
-                    data-i18n-placeholder="enterYearlyIncome"
-                    data-i18n-title="enterYearlyIncomeTitle"
-                >
-                <button type="submit" data-i18n="calculate">Calculate</button>
-            </form>
-
-            <div id="results">
-                <p>
-                    <span data-i18n="converted">Income in GEL: </span>
-                    <span id="converted-amount" class="copyable">-</span>
-                    <span id="converted-amount-msg" class="copy-msg" >copied</span>
-                </p>
-                <p>
-                    <span data-i18n="total">Total Yearly Income in GEL: </span>
-                    <span id="total-yearly-income" class="copyable">-</span>
-                    <span id="total-yearly-income-msg" class="copy-msg">copied</span>
-                </p>
-            </div>
+      <form id="converter-form">
+        <div id="income-entries">
+          <div class="income-entry">
+            <input type="number" step="0.01" class="income-amount" required data-i18n-placeholder="enterIncome" />
+            <select class="income-currency" required>
+              <option value="USD" selected>USD</option>
+              <option value="EUR">EUR</option>
+              <option value="RUB">RUB</option>
+            </select>
+            <input type="date" class="income-date" required />
+          </div>
         </div>
-    </main>
 
-    <footer class="footer">
-        <p data-i18n="support">This tool is open-source and non-commercial. If it helps you — <a href="https://coff.ee/mirniypirojok" target="_blank">buyng me a cup of coffee</a> means a lot!☕🙌</p>
-        <p data-i18n="feedback">💬 Have ideas or feedback?</p>
-        <p data-i18n="contact">
-            Message me on 
-            <a href="https://t.me/CJlABA_6o6y" target="_blank">Telegram</a> or email at 
-            <a href="mailto:mirniypirojok@gmail.com">mirniypirojok@gmail.com</a>
+        <button type="button" id="add-income" data-i18n="addIncome"></button>
+        <input
+          type="number"
+          step="0.01"
+          id="yearly-income"
+          required
+          data-i18n-placeholder="enterYearlyIncome"
+          data-i18n-title="enterYearlyIncomeTitle"
+          title=""
+        />
+        <button type="submit" data-i18n="calculate"></button>
+      </form>
+
+      <div id="results">
+        <p>
+          <span data-i18n="converted"></span>
+          <span id="converted-amount" class="copyable">-</span>
+          <span id="converted-amount-msg" class="copy-msg">copied</span>
         </p>
-        <br>
-        <p class="license">
-            © 2024 MirniyPirojok · 
-            Licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a> ·
-            Non-commercial use only
+        <p>
+          <span data-i18n="total"></span>
+          <span id="total-yearly-income" class="copyable">-</span>
+          <span id="total-yearly-income-msg" class="copy-msg">copied</span>
         </p>
-    </footer>
-    <script src="script.js"></script>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p data-i18n="support"></p>
+    <p data-i18n="feedback"></p>
+    <p data-i18n="contact"></p>
+    <br />
+    <p class="license">
+      © 2024 MirniyPirojok ·
+      Licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a> ·
+      Non-commercial use only
+    </p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
