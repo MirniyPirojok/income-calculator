@@ -103,9 +103,9 @@ function copyToClipboard(event) {
         const msgEl = event.target.id === 'converted-amount' ? convertedAmountMsgEl : totalYearlyIncomeMsgEl;
     
         // Show "Copied" message for 2 seconds
-        msgEl.style.display = 'inline';
+        msgEl.classList.add('show');
         setTimeout(() => {
-            msgEl.style.display = 'none';
+            msgEl.classList.remove('show');
         }, 2000);
 
     }).catch(err => {

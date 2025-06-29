@@ -174,7 +174,12 @@ button:active {
     color: red;
     font-size: 0.8em;
     margin-left: 1px;
-    display: none; /* Initially hidden */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.copy-msg.show {
+    opacity: 1;
 }
 
 .footer {
