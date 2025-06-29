@@ -25,6 +25,17 @@ body {
     padding: 20px;
 }
 
+.lang-switcher {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin: 10px 20px 0 auto;
+    background: #ffffffcc;
+    padding: 6px 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
 /* Container styles */
 .container {
     background: #ffffff;
@@ -183,7 +194,6 @@ button:active {
 }
 
 .footer {
-    margin-top: 40px;
     text-align: center;
     padding: 20px;
     color: #777;
