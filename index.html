@@ -8,45 +8,56 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <p class="app-description">
-            Income Calculator is a web app that converts income to GEL (Georgian Lari) based on a specific date and calculates total yearly income in GEL using rates from the National Bank of Georgia's API.
-            View the source code on <a href="https://github.com/MirniyPirojok/currency-converter">GitHub</a>
-        </p>
+    <main class="main">
+        <div class="container">
+            <p class="app-description">
+                Income Calculator is a web app that converts income to GEL (Georgian Lari) based on a specific date and calculates total yearly income in GEL using rates from the National Bank of Georgia's API.
+                View the source code on <a href="https://github.com/MirniyPirojok/currency-converter">GitHub</a>
+            </p>
 
-        <form id="converter-form">
-            <div id="income-entries">
-                <div class="income-entry">
-                    <input type="number" step="0.01" class="income-amount" placeholder="Enter Income" required>
-                    <select class="income-currency" required>
-                        <option value="USD" selected>USD</option>
-                        <option value="EUR">EUR</option>
-                        <option value="RUB">RUB</option>
-                    </select>
-                    <input type="date" class="income-date" placeholder="Date" required>
+            <form id="converter-form">
+                <div id="income-entries">
+                    <div class="income-entry">
+                        <input type="number" step="0.01" class="income-amount" placeholder="Enter Income" required>
+                        <select class="income-currency" required>
+                            <option value="USD" selected>USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="RUB">RUB</option>
+                        </select>
+                        <input type="date" class="income-date" placeholder="Date" required>
+                    </div>
                 </div>
+
+                <button type="button" id="add-income">+Add Income</button>
+
+                <input type="number" step="0.01" id="yearly-income" placeholder="Enter Yearly Income in GEL">
+
+                <button type="submit">Calculate</button>
+            </form>
+
+            <div id="results">
+                <p>
+                    Income in GEL: 
+                    <span id="converted-amount" class="copyable">-</span>
+                    <span id="converted-amount-msg" class="copy-msg" style="display:none;">copied</span>
+                </p>
+                <p>
+                    Total Yearly Income in GEL: 
+                    <span id="total-yearly-income" class="copyable">-</span>
+                    <span id="total-yearly-income-msg" class="copy-msg" style="display:none;">copied</span>
+                </p>
             </div>
-
-            <button type="button" id="add-income">+Add Income</button>
-
-            <input type="number" step="0.01" id="yearly-income" placeholder="Enter Yearly Income in GEL">
-
-            <button type="submit">Calculate</button>
-        </form>
-
-        <div id="results">
-            <p>
-                Income in GEL: 
-                <span id="converted-amount" class="copyable">-</span>
-                <span id="converted-amount-msg" class="copy-msg" style="display:none;">copied</span>
-            </p>
-            <p>
-                Total Yearly Income in GEL: 
-                <span id="total-yearly-income" class="copyable">-</span>
-                <span id="total-yearly-income-msg" class="copy-msg" style="display:none;">copied</span>
-            </p>
         </div>
-    </div>
+    </main>
+
+    <footer class="footer">
+        <p>💬 Have ideas or feedback?</p>
+        <p>
+            Message me on 
+            <a href="https://t.me/CJlABA_6o6y" target="_blank">Telegram</a> or email at 
+            <a href="mailto:mirniypirojok@gmail.com">mirniypirojok@gmail.com</a>
+        </p>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>
