@@ -178,7 +178,11 @@ const translations = {
     `,
     enterIncome: `Enter Income`,
     enterYearlyIncome: `Enter Yearly Income in GEL`,
-    enterYearlyIncomeTitle: `Cumulative income since the start of the calendar year`
+    enterYearlyIncomeTitle: `Cumulative income since the start of the calendar year`,
+    support: `
+        This tool is open-source and non-commercial.
+        If it helps you — <a href="https://coff.ee/mirniypirojok" target="_blank">buyng me a cup of coffee</a> means a lot!☕🙌
+    `
   },
 
   ru: {
@@ -198,6 +202,10 @@ const translations = {
     `,
     enterIncome: `Введите доход`,
     enterYearlyIncome: `Введите годовой доход в лари`,
-    enterYearlyIncomeTitle: `Суммарный доход нарастающим итогом c начала календарного года`
+    enterYearlyIncomeTitle: `Суммарный доход нарастающим итогом c начала календарного года`,
+    support: `
+        Этот инструмент открытый и некоммерческий. 
+        Если он оказался полезен, буду рад, если решите <a href="https://coff.ee/mirniypirojok" target="_blank">угостить меня чашкой кофе</a>!☕🙌
+    `
   }
 };
