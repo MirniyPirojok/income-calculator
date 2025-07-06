@@ -181,7 +181,7 @@ const translations = {
     enterYearlyIncomeTitle: `Cumulative income since the start of the calendar year`,
     support: `
         This tool is open-source and non-commercial.
-        If it helps you — <a href="https://coff.ee/mirniypirojok" target="_blank">buyng me a cup of coffee</a> means a lot!☕🙌
+        If it helps you — <a href="https://coff.ee/mirniypirojok" target="_blank">buying me a cup of coffee</a> means a lot!☕🙌
     `
   },
 
