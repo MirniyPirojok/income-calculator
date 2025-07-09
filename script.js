@@ -151,6 +151,11 @@ function setLanguage(lang) {
     });
 
     localStorage.setItem("lang", lang);
+
+    gtag('event', 'language_change', {
+        event_category: 'language',
+        event_label: lang
+    });
 }
 
 // Load preferred language
