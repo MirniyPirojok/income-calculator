@@ -34,6 +34,11 @@ document.getElementById('add-income').addEventListener('click', () => {
 document.getElementById('converter-form').addEventListener('submit', async (event) => {
     event.preventDefault();
 
+    gtag('event', 'calculate_click', {
+        event_category: 'engagement',
+        event_label: 'Calculate Button'
+    });
+    
     const currentDate = new Date();
     const minDate = new Date('2016-01-01');
 
