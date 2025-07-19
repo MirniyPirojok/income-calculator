@@ -5,7 +5,8 @@ const CONFIG = {
     CURRENCIES: ['USD', 'EUR', 'RUB'],
     EMAIL: 'mirniypirojok@gmail.com',
     TELEGRAM_URL: 'https://t.me/CJlABA_6o6y',
-    SUPPORT_URL: 'https://coff.ee/mirniypirojok'
+    SUPPORT_URL: 'https://coff.ee/mirniypirojok',
+    GITHUB_URL: 'https://github.com/MirniyPirojok/income-calculator'
 };
 
 const SELECTORS = {
@@ -19,11 +20,19 @@ const SELECTORS = {
     TOTAL_YEARLY_INCOME_MSG: '#total-yearly-income-msg'
 };
 
+// === TRANSLATIONS ===
+// Combine translations from separate files
+const translations = {
+    en: translationsEN,
+    ru: translationsRU
+};
+
 // === APP OBJECT ===
 const App = {
     currentLang: localStorage.getItem("lang") || "en",
     
     init() {
+        this.processTranslations();
         this.setupEventListeners();
         this.loadLanguage();
     },
@@ -256,41 +265,16 @@ App.loadLanguage = function() {
     this.setLanguage(savedLang);
 };
 
-// Translations
-const translations = {
-  en: {
-    description: `
-        Income Calculator is a web app that converts income to GEL (Georgian Lari) based on a specific date and calculates total yearly income in GEL
-        using rates from the National Bank of Georgia's API.
-        View the source code on <a href="https://github.com/MirniyPirojok/income-calculator" target="_blank">GitHub</a>
-    `,
-    addIncome: `+Add Income`,
-    calculate: `Calculate`,
-    converted: `Income in GEL:`,
-    total: `Total Yearly Income in GEL:`,
-    enterIncome: `Enter Income`,
-    enterYearlyIncome: `Enter Yearly Income in GEL`,
-    enterYearlyIncomeTitle: `Cumulative income since the start of the calendar year`,
-    feedback: `<a href="${CONFIG.TELEGRAM_URL}" target="_blank">Telegram</a> | <span class="email-link">Email</span>`,
-    support: `☕ <a href="${CONFIG.SUPPORT_URL}" target="_blank">Buy coffee</a>`
-  },
-
-  ru: {
-    description: `
-        Калькулятор доходов — это веб-приложение, которое конвертирует доход в грузинские лари (GEL) по указанной дате и рассчитывает общий доход за год в лари, 
-        используя курсы Национального банка Грузии.
-        Исходный код доступен на <a href="https://github.com/MirniyPirojok/income-calculator" target="_blank">GitHub</a>
-    `,
-    addIncome: `+Добавить доход`,
-    calculate: `Рассчитать`,
-    converted: `Доход в лари:`,
-    total: `Общий доход за год в лари:`,
-    enterIncome: `Введите доход`,
-    enterYearlyIncome: `Введите годовой доход в лари`,
-    enterYearlyIncomeTitle: `Суммарный доход нарастающим итогом c начала календарного года`,
-    feedback: `<a href="${CONFIG.TELEGRAM_URL}" target="_blank">Telegram</a> | <span class="email-link">Email</span>`,
-    support: `☕ <a href="${CONFIG.SUPPORT_URL}" target="_blank">Поддержать</a>`
-  }
+// Process template variables in translations
+App.processTranslations = function() {
+    for (const lang in translations) {
+        for (const key in translations[lang]) {
+            translations[lang][key] = translations[lang][key]
+                .replace(/\{\{GITHUB_URL\}\}/g, CONFIG.GITHUB_URL)
+                .replace(/\{\{TELEGRAM_URL\}\}/g, CONFIG.TELEGRAM_URL)
+                .replace(/\{\{SUPPORT_URL\}\}/g, CONFIG.SUPPORT_URL);
+        }
+    }
 };
 
 App.copyEmail = function(event) {
