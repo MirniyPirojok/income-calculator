@@ -227,6 +227,41 @@ button:active {
     font-size: 12px;
 }
 
+/* Email link styles */
+.email-link {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.email-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Email copy notification */
+.email-notification {
+    background: #28a745;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    z-index: 1001;
+    opacity: 1;
+    animation: fadeInOut 2s ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(10px); }
+    20% { opacity: 1; transform: translateY(0); }
+    80% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+}
+
 /* Responsive design */
 @media (max-width: 600px) {
     .container {

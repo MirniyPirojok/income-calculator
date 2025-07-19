@@ -184,7 +184,7 @@ const translations = {
     enterIncome: `Enter Income`,
     enterYearlyIncome: `Enter Yearly Income in GEL`,
     enterYearlyIncomeTitle: `Cumulative income since the start of the calendar year`,
-    feedback: `💬 Feedback: <a href="https://t.me/CJlABA_6o6y" target="_blank">Telegram</a> | <a href="mailto:mirniypirojok@gmail.com">Email</a>`,
+    feedback: `<a href="https://t.me/CJlABA_6o6y" target="_blank">Telegram</a> | <span class="email-link" onclick="copyEmail(event)">Email</span>`,
     support: `☕ <a href="https://coff.ee/mirniypirojok" target="_blank">Support</a>`
   },
 
@@ -201,7 +201,41 @@ const translations = {
     enterIncome: `Введите доход`,
     enterYearlyIncome: `Введите годовой доход в лари`,
     enterYearlyIncomeTitle: `Суммарный доход нарастающим итогом c начала календарного года`,
-    feedback: `💬 Связь: <a href="https://t.me/CJlABA_6o6y" target="_blank">Telegram</a> | <a href="mailto:mirniypirojok@gmail.com">Почта</a>`,
+    feedback: `<a href="https://t.me/CJlABA_6o6y" target="_blank">Telegram</a> | <span class="email-link" onclick="copyEmail(event)">Email</span>`,
     support: `☕ <a href="https://coff.ee/mirniypirojok" target="_blank">Поддержать</a>`
   }
 };
+
+// === Copy Email to Clipboard ===
+function copyEmail(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const emailAddress = 'mirniypirojok@gmail.com';
+    
+    navigator.clipboard.writeText(emailAddress).then(() => {
+        // Create temporary notification
+        const notification = document.createElement('span');
+        notification.textContent = 'Email copied!';
+        notification.className = 'email-notification';
+        
+        // Position notification near the clicked element
+        const rect = event.target.getBoundingClientRect();
+        notification.style.position = 'fixed';
+        notification.style.left = rect.left + 'px';
+        notification.style.top = (rect.top - 30) + 'px';
+        
+        document.body.appendChild(notification);
+        
+        // Remove notification after 2 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy email: ', err);
+        // Fallback - show email in alert
+        alert('Email: ' + emailAddress);
+    });
+}
