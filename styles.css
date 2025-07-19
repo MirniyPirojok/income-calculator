@@ -195,26 +195,36 @@ button:active {
 
 .footer {
     text-align: center;
-    padding: 20px;
+    padding: 15px 20px;
     color: #777;
-    font-size: 14px;
+    font-size: 13px;
     background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    line-height: 1.4;
 }
 
-.footer-text a {
+.footer-separator {
+    color: #ccc;
+    font-weight: bold;
+}
+
+.footer a {
     color: #007bff;
     text-decoration: none;
     font-weight: 500;
 }
 
-.footer-text a:hover {
+.footer a:hover {
     text-decoration: underline;
     color: #0056b3;
 }
 
-.license {
+.footer-license {
     font-size: 12px;
-    color: #777;
 }
 
 /* Responsive design */
@@ -248,5 +258,19 @@ button:active {
     .remove-income {
         padding: 5px 5px;
         margin-left: 0px;
+    }
+
+    .footer {
+        padding: 10px;
+        font-size: 11px;
+    }
+    
+    .footer {
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .footer-separator {
+        display: none;
     }
 }

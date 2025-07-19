@@ -181,18 +181,11 @@ const translations = {
     calculate: `Calculate`,
     converted: `Income in GEL:`,
     total: `Total Yearly Income in GEL:`,
-    feedback: `💬 Have ideas or feedback?`,
-    contact: `
-        Message me on <a href="https://t.me/CJlABA_6o6y" target="_blank">Telegram</a> 
-        or email at <a href="mailto:mirniypirojok@gmail.com">mirniypirojok@gmail.com</a>
-    `,
     enterIncome: `Enter Income`,
     enterYearlyIncome: `Enter Yearly Income in GEL`,
     enterYearlyIncomeTitle: `Cumulative income since the start of the calendar year`,
-    support: `
-        This tool is open-source and non-commercial.
-        If it helps you — <a href="https://coff.ee/mirniypirojok" target="_blank">buying me a cup of coffee</a> means a lot!☕🙌
-    `
+    feedback: `💬 Feedback: <a href="https://t.me/CJlABA_6o6y" target="_blank">Telegram</a> | <a href="mailto:mirniypirojok@gmail.com">Email</a>`,
+    support: `☕ <a href="https://coff.ee/mirniypirojok" target="_blank">Support</a>`
   },
 
   ru: {
@@ -205,17 +198,10 @@ const translations = {
     calculate: `Рассчитать`,
     converted: `Доход в лари:`,
     total: `Общий доход за год в лари:`,
-    feedback: `💬 Есть идеи или замечания?`,
-    contact: `
-        Напишите в <a href="https://t.me/CJlABA_6o6y" target="_blank">Telegram</a> 
-        или на <a href="mailto:mirniypirojok@gmail.com">mirniypirojok@gmail.com</a>
-    `,
     enterIncome: `Введите доход`,
     enterYearlyIncome: `Введите годовой доход в лари`,
     enterYearlyIncomeTitle: `Суммарный доход нарастающим итогом c начала календарного года`,
-    support: `
-        Этот инструмент открытый и некоммерческий. 
-        Если он оказался полезен, буду рад, если решите <a href="https://coff.ee/mirniypirojok" target="_blank">скинуть мне пару монет на батон</a>!🥖🙌
-    `
+    feedback: `💬 Связь: <a href="https://t.me/CJlABA_6o6y" target="_blank">Telegram</a> | <a href="mailto:mirniypirojok@gmail.com">Почта</a>`,
+    support: `☕ <a href="https://coff.ee/mirniypirojok" target="_blank">Поддержать</a>`
   }
 };
