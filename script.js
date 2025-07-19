@@ -1,119 +1,202 @@
-// === Add income entry ===
-document.getElementById('add-income').addEventListener('click', () => {
-    const incomeEntries = document.getElementById('income-entries');
+// === CONSTANTS ===
+const CONFIG = {
+    MIN_DATE: '2016-01-01',
+    API_URL: 'https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json/',
+    CURRENCIES: ['USD', 'EUR', 'RUB'],
+    EMAIL: 'mirniypirojok@gmail.com',
+    TELEGRAM_URL: 'https://t.me/CJlABA_6o6y',
+    SUPPORT_URL: 'https://coff.ee/mirniypirojok'
+};
+
+const SELECTORS = {
+    ADD_INCOME: '#add-income',
+    INCOME_ENTRIES: '#income-entries',
+    CONVERTER_FORM: '#converter-form',
+    YEARLY_INCOME: '#yearly-income',
+    CONVERTED_AMOUNT: '#converted-amount',
+    TOTAL_YEARLY_INCOME: '#total-yearly-income',
+    CONVERTED_AMOUNT_MSG: '#converted-amount-msg',
+    TOTAL_YEARLY_INCOME_MSG: '#total-yearly-income-msg'
+};
+
+// === APP OBJECT ===
+const App = {
+    currentLang: localStorage.getItem("lang") || "en",
+    
+    init() {
+        this.setupEventListeners();
+        this.loadLanguage();
+    },
+    
+    setupEventListeners() {
+        // Add income entry
+        document.querySelector(SELECTORS.ADD_INCOME).addEventListener('click', () => {
+            this.addIncomeEntry();
+        });
+        
+        // Form submission
+        document.querySelector(SELECTORS.CONVERTER_FORM).addEventListener('submit', (event) => {
+            this.handleFormSubmit(event);
+        });
+        
+        // Copy to clipboard
+        document.querySelector(SELECTORS.CONVERTED_AMOUNT).addEventListener('click', (event) => {
+            this.copyToClipboard(event);
+        });
+        
+        document.querySelector(SELECTORS.TOTAL_YEARLY_INCOME).addEventListener('click', (event) => {
+            this.copyToClipboard(event);
+        });
+    }
+};
+
+// Add method to App object
+App.addIncomeEntry = function() {
+    const incomeEntries = document.querySelector(SELECTORS.INCOME_ENTRIES);
+    
+    // Create currency options
+    const currencyOptions = CONFIG.CURRENCIES.map(currency => 
+        `<option value="${currency}">${currency}</option>`
+    ).join('');
     
     // Create a new income entry row
     const newIncomeEntry = document.createElement('div');
     newIncomeEntry.classList.add('income-entry');
     newIncomeEntry.innerHTML = `
-    <input type="number" step="0.01" class="income-amount" required data-i18n-placeholder="enterIncome">
-    <select class="income-currency" required>
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-        <option value="RUB">RUB</option>
-    </select>
-    <input type="date" class="income-date" required>
-    <button type="button" class="remove-income">—</button>
+        <input type="number" step="0.01" class="income-amount" required data-i18n-placeholder="enterIncome">
+        <select class="income-currency" required>
+            ${currencyOptions}
+        </select>
+        <input type="date" class="income-date" required>
+        <button type="button" class="remove-income">—</button>
     `;
     incomeEntries.appendChild(newIncomeEntry);
 
     // Apply translations to new placeholders
-    newIncomeEntry.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
-        const key = el.getAttribute("data-i18n-placeholder");
-        const placeholder = translations[currentLang][key];
-        if (placeholder) el.placeholder = placeholder;
-    });
+    this.applyTranslationsToElement(newIncomeEntry);
 
     // Add event listener to the remove button
     newIncomeEntry.querySelector('.remove-income').addEventListener('click', () => {
         incomeEntries.removeChild(newIncomeEntry);
     });
-});
+};
 
-// === Submit form ===
-document.getElementById('converter-form').addEventListener('submit', async (event) => {
+App.applyTranslationsToElement = function(element) {
+    element.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.getAttribute("data-i18n-placeholder");
+        const placeholder = translations[this.currentLang][key];
+        if (placeholder) el.placeholder = placeholder;
+    });
+};
+
+App.handleFormSubmit = async function(event) {
     event.preventDefault();
 
-    gtag('event', 'calculate_click', {
-        event_category: 'engagement',
-        event_label: 'Calculate Button'
-    });
+    this.trackAnalytics('calculate_click');
     
-    const currentDate = new Date();
-    const minDate = new Date('2016-01-01');
-
     const incomeEntries = document.querySelectorAll('.income-entry');
-    const yearlyIncomeGEL = parseFloat(document.getElementById('yearly-income').value) || 0;
+    const yearlyIncomeGEL = parseFloat(document.querySelector(SELECTORS.YEARLY_INCOME).value) || 0;
     let totalConvertedAmount = 0;
 
     for (const entry of incomeEntries) {
-        const incomeCurrency = entry.querySelector('.income-currency').value.toUpperCase();
-        const income = parseFloat(entry.querySelector('.income-amount').value);
-        const incomeDate = new Date(entry.querySelector('.income-date').value);
-
-        if (incomeDate > currentDate || incomeDate < minDate) {
-            alert(`Date must be between ${minDate.toISOString().split('T')[0]} and today's date.`);
-            return;
-        }
-
-        if (!income || !incomeCurrency) {
-            alert("Please fill all fields correctly.");
+        const entryData = this.getEntryData(entry);
+        
+        if (!this.validateEntry(entryData)) {
             return;
         }
 
         try {
-            const formattedDate = formatDate(incomeDate);
-            const response = await fetch(`https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json/?currencies=${incomeCurrency}&date=${formattedDate}`);
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch exchange rate');
-            }
-
-            const data = await response.json();
-            const exchangeRate = data[0]?.currencies[0]?.rate;
-            const quantity = data[0]?.currencies[0]?.quantity;
-
-            if (!exchangeRate || !quantity) {
-                throw new Error('Currency not found');
-            }
-
-            const convertedAmount = income / quantity * exchangeRate;
+            const convertedAmount = await this.convertCurrency(entryData);
             totalConvertedAmount += convertedAmount;
-
         } catch (error) {
-            console.error('Error fetching currency data:', error);
+            console.error('Error converting currency:', error);
             alert('Error fetching currency data. Please check your inputs or try again later.');
             return;
         }
     }
 
+    this.displayResults(totalConvertedAmount, yearlyIncomeGEL);
+};
+
+App.getEntryData = function(entry) {
+    return {
+        currency: entry.querySelector('.income-currency').value.toUpperCase(),
+        amount: parseFloat(entry.querySelector('.income-amount').value),
+        date: new Date(entry.querySelector('.income-date').value)
+    };
+};
+
+App.validateEntry = function(entryData) {
+    const currentDate = new Date();
+    const minDate = new Date(CONFIG.MIN_DATE);
+    
+    if (entryData.date > currentDate || entryData.date < minDate) {
+        alert(`Date must be between ${CONFIG.MIN_DATE} and today's date.`);
+        return false;
+    }
+
+    if (!entryData.amount || !entryData.currency) {
+        alert("Please fill all fields correctly.");
+        return false;
+    }
+    
+    return true;
+};
+
+App.convertCurrency = async function(entryData) {
+    const formattedDate = this.formatDate(entryData.date);
+    const response = await fetch(`${CONFIG.API_URL}?currencies=${entryData.currency}&date=${formattedDate}`);
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch exchange rate');
+    }
+
+    const data = await response.json();
+    const exchangeRate = data[0]?.currencies[0]?.rate;
+    const quantity = data[0]?.currencies[0]?.quantity;
+
+    if (!exchangeRate || !quantity) {
+        throw new Error('Currency not found');
+    }
+
+    return entryData.amount / quantity * exchangeRate;
+};
+
+App.displayResults = function(totalConvertedAmount, yearlyIncomeGEL) {
     const totalYearlyIncome = yearlyIncomeGEL + totalConvertedAmount;
 
-    document.getElementById('converted-amount').textContent = totalConvertedAmount.toFixed(2);
-    document.getElementById('total-yearly-income').textContent = totalYearlyIncome.toFixed(2);
-});
+    document.querySelector(SELECTORS.CONVERTED_AMOUNT).textContent = totalConvertedAmount.toFixed(2);
+    document.querySelector(SELECTORS.TOTAL_YEARLY_INCOME).textContent = totalYearlyIncome.toFixed(2);
+};
 
-// === Copy to clipboard ===
-document.getElementById('converted-amount').addEventListener('click', (event) => {
-    copyToClipboard(event);
-});
+App.trackAnalytics = function(eventName, label = '') {
+    if (typeof gtag !== 'undefined') {
+        const eventData = {
+            event_category: eventName === 'language_change' ? 'language' : 'engagement'
+        };
+        
+        if (label) {
+            eventData.event_label = label;
+        } else if (eventName === 'calculate_click') {
+            eventData.event_label = 'Calculate Button';
+        }
+        
+        gtag('event', eventName, eventData);
+    }
+};
 
-document.getElementById('total-yearly-income').addEventListener('click', (event) => {
-    copyToClipboard(event);
-});
-
-function formatDate(inputDate) {
+App.formatDate = function(inputDate) {
     const date = new Date(inputDate);
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
-}
+};
 
-function copyToClipboard(event) {
+App.copyToClipboard = function(event) {
     navigator.clipboard.writeText(event.target.textContent).then(() => {
-        const convertedAmountMsgEl = document.getElementById('converted-amount-msg');
-        const totalYearlyIncomeMsgEl = document.getElementById('total-yearly-income-msg');
+        const convertedAmountMsgEl = document.querySelector(SELECTORS.CONVERTED_AMOUNT_MSG);
+        const totalYearlyIncomeMsgEl = document.querySelector(SELECTORS.TOTAL_YEARLY_INCOME_MSG);
         const msgEl = event.target.id === 'converted-amount' ? convertedAmountMsgEl : totalYearlyIncomeMsgEl;
     
         // Show "Copied" message for 2 seconds
@@ -125,49 +208,53 @@ function copyToClipboard(event) {
     }).catch(err => {
         console.error('Failed to copy text: ', err);
     });
-}
+};
 
-// === Switch language ===
-// Track current language globally
-let currentLang = localStorage.getItem("lang") || "en";
+App.setLanguage = function(lang) {
+    this.currentLang = lang;
 
-function setLanguage(lang) {
-    currentLang = lang;
-
-    //translate  text
+    // Translate text
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
         const html = translations[lang][key];
         if (html) el.innerHTML = html;
     });
 
-    //translate placeholders
+    // Translate placeholders
     document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
         const key = el.getAttribute("data-i18n-placeholder");
         const placeholder = translations[lang][key];
         if (placeholder) el.placeholder = placeholder;
     });
 
-    //translate titles
+    // Translate titles
     document.querySelectorAll("[data-i18n-title]").forEach(el => {
         const key = el.getAttribute("data-i18n-title");
         const title = translations[lang][key];
         if (title) el.title = title;
     });
 
+    // Setup email links after translation
+    this.setupEmailLinks();
+
     localStorage.setItem("lang", lang);
 
-    gtag('event', 'language_change', {
-        event_category: 'language',
-        event_label: lang
-    });
-}
+    this.trackAnalytics('language_change', lang);
+};
 
-// Load preferred language
-document.addEventListener("DOMContentLoaded", () => {
-  const savedLang = localStorage.getItem("lang") || "en";
-  setLanguage(savedLang);
-});
+App.setupEmailLinks = function() {
+    const self = this;
+    document.querySelectorAll('.email-link').forEach(el => {
+        el.addEventListener('click', (event) => {
+            self.copyEmail(event);
+        });
+    });
+};
+
+App.loadLanguage = function() {
+    const savedLang = localStorage.getItem("lang") || "en";
+    this.setLanguage(savedLang);
+};
 
 // Translations
 const translations = {
@@ -184,8 +271,8 @@ const translations = {
     enterIncome: `Enter Income`,
     enterYearlyIncome: `Enter Yearly Income in GEL`,
     enterYearlyIncomeTitle: `Cumulative income since the start of the calendar year`,
-    feedback: `<a href="https://t.me/CJlABA_6o6y" target="_blank">Telegram</a> | <span class="email-link" onclick="copyEmail(event)">Email</span>`,
-    support: `☕ <a href="https://coff.ee/mirniypirojok" target="_blank">Support</a>`
+    feedback: `<a href="${CONFIG.TELEGRAM_URL}" target="_blank">Telegram</a> | <span class="email-link">Email</span>`,
+    support: `☕ <a href="${CONFIG.SUPPORT_URL}" target="_blank">Buy coffee</a>`
   },
 
   ru: {
@@ -201,19 +288,16 @@ const translations = {
     enterIncome: `Введите доход`,
     enterYearlyIncome: `Введите годовой доход в лари`,
     enterYearlyIncomeTitle: `Суммарный доход нарастающим итогом c начала календарного года`,
-    feedback: `<a href="https://t.me/CJlABA_6o6y" target="_blank">Telegram</a> | <span class="email-link" onclick="copyEmail(event)">Email</span>`,
-    support: `☕ <a href="https://coff.ee/mirniypirojok" target="_blank">Поддержать</a>`
+    feedback: `<a href="${CONFIG.TELEGRAM_URL}" target="_blank">Telegram</a> | <span class="email-link">Email</span>`,
+    support: `☕ <a href="${CONFIG.SUPPORT_URL}" target="_blank">Поддержать</a>`
   }
 };
 
-// === Copy Email to Clipboard ===
-function copyEmail(event) {
+App.copyEmail = function(event) {
     event.preventDefault();
     event.stopPropagation();
     
-    const emailAddress = 'mirniypirojok@gmail.com';
-    
-    navigator.clipboard.writeText(emailAddress).then(() => {
+    navigator.clipboard.writeText(CONFIG.EMAIL).then(() => {
         // Create temporary notification
         const notification = document.createElement('span');
         notification.textContent = 'Email copied!';
@@ -236,6 +320,14 @@ function copyEmail(event) {
     }).catch(err => {
         console.error('Failed to copy email: ', err);
         // Fallback - show email in alert
-        alert('Email: ' + emailAddress);
+        alert('Email: ' + CONFIG.EMAIL);
     });
+};
+
+// === GLOBAL FUNCTIONS FOR BACKWARD COMPATIBILITY ===
+function setLanguage(lang) {
+    App.setLanguage(lang);
 }
+
+// === INITIALIZE APP ===
+App.init();
